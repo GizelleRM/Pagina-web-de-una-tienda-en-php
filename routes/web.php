@@ -16,7 +16,10 @@ Route::post('/', function(){
 
 //aqui se van a cargar todo el listado de los productos
 Route::get('products', function(){
-    return view('products.index'); //devolver una vista
+    $products = Product::all();
+    //tambien puede ser de esta forma
+    //$products = Products::orderBy('created_at', 'desc')-> get();
+    return view('products.index', compact('products')); //devolver una vista
 }) ->name('products.index');
 
 Route::get('products/create', function(){
@@ -29,4 +32,5 @@ Route::post('products', function(Request $request){
     $newProduct->price = $request->input(('price'));
     $newProduct->save();
 
+    return redirect()->route('products.index') -> with('info', 'Producto creado exitosamente');
 })->name('products.store');
